@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Connexion - Instagram Style</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: white; /* Couleur de fond similaire à la partie gauche ou droite */
+        }
+
+        .container {
+            display: flex;
+            width: 88vw;
+            height: 65vh;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative; /* Ajout de la position relative pour le positionnement absolu du carousel */
+            background-color: white; /* Couleur de fond similaire à la partie gauche ou droite */
+        }
+
+        .carousel {
+            flex: 2; /* Ajuster la taille de la partie gauche */
+            width: 50vw;
+            overflow: hidden;
+            position: relative; /* Ajout de la position relative pour le positionnement absolu des images */
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute; /* Position absolue pour superposer les images */
+            top: 0;
+            left: 0;
+            opacity: 0; /* Masquer toutes les images sauf la première */
+            transition: opacity 0.5s ease; /* Ajout d'une transition pour un effet de fondu */
+        }
+
+        .carousel img:first-child {
+            opacity: 1; /* Afficher la première image */
+        }
+
+        .login-form-container {
+            flex: 1; /* Ajuster la taille de la partie droite */
+            display: flex;
+            flex-direction: column; /* Ajout de la direction de colonne pour les petits écrans */
+            justify-content: center;
+            align-items: center;
+            margin-left: 40px; /* Ajout de marge pour créer de l'espace */
+        }
+
+        .login-form {
+            border: 2px solid black;
+            width: 98%;
+            height: 80%;
+            text-align: center; /* Centrer le contenu horizontalement */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Alignement en haut */
+            padding: 20px 0; /* Ajout de padding pour s'assurer que le contenu ne touche pas les bords */
+        }
+
+        .login-form h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3vw;
+            margin: 0; /* Supprimer la marge supplémentaire */
+            padding-bottom: 20px; /* Ajout d'un padding pour espacer le titre du reste du contenu */
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"],
+        .login-form button {
+            width: 60%;
+            padding: 10px;
+            margin: 0 auto; /* Pour centrer horizontalement */
+            margin-bottom: 15px;
+            border: none; /* Supprimer la bordure */
+            border-radius: 5px;
+            outline: none;
+            background-color: #f0f0f0; /* Gris clair pour le fond des champs de saisie */
+        }
+
+        .login-form button {
+            background-color: #ddd; /* Gris clair pour les boutons */
+            color: #333; /* Couleur du texte pour les boutons */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #ccc; /* Gris légèrement plus foncé au survol */
+        }
+
+        .signup-link {
+            margin-top: 1px;
+            font-size: 14px;
+            color: #003569;
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
+        .password-reset-link {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #003569;
+            text-decoration: none;
+        }
+
+        .password-reset-link:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            width: 60%;
+            margin: 0 auto;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #000;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .or-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 0 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 13px;
+            font-size: 2.5vh;
+            color: #777;
+        }
+
+        @media screen and (max-width: 700px ) {
+            .container {
+                margin: 0 auto; /* Centre horizontalement */
+                flex-direction: column; /* Alignement vertical des éléments */
+                height: auto; /* Hauteur automatique pour le réalignement */
+            }
+
+            .carousel {
+                display: none; /* Cacher le carrousel sur les écrans étroits */
+            }
+
+            .login-form-container {
+                margin: 0 auto; /* Centre horizontalement */
+                width: 80%; /* Largeur du formulaire de connexion sur les écrans étroits */
+            }
+        }
+        @media screen and (max-height: 400px) {
+            .container {
+                margin: 0 auto; /* Centre horizontalement */
+                flex-direction: column; /* Alignement vertical des éléments */
+                height: auto; /* Hauteur automatique pour le réalignement */
+            }
+
+            .carousel {
+                display: none; /* Cacher le carrousel sur les écrans étroits */
+            }
+
+            .login-form-container {
+                margin: 0 auto; /* Centre horizontalement */
+                width: 80%; /* Largeur du formulaire de connexion sur les écrans étroits */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="carousel">
+            <!-- Insérer vos images de carrousel ici -->
+            <!-- Remplacez "IMAGE/image1.png" et "image2.png" par les liens de vos images -->
+            <img src="../IMAGE/image1.png" alt="Image 1">
+            <img src="../IMAGE/image2.png" alt="Image 2">
+        </div>
+        <div class="login-form-container">
+            <div class="login-form">
+                                         
+                <h1>Tournament</h1>
+                           
+                            
+                            
+                <form action="/changer_mdp" method="post">
+                <input type="hidden" id="email_mdp" name="email_mdp" value='<%= email_qui_veut_changer_mdp %>' required>
+                <input type="password" id="new_password" name="new_password"  placeholder="Nouveau Mot de passe" required>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirmation mot de passe" required>
+                                       
+                                 <% if (error !== false) { %>
+                    <p style="color: red;font-size: 12px"><%= error %></p>
+                
+                <button type="submit" name="register" value="Valider"> Valider Changement </button>
+                </form>
+                
+            
+                <br>
+            
+                <div class="divider">
+                    <span class="or-text">OU</span>
+                </div>
+                <br>
+           
+                               <a href="/" class="signup-link"> Retour menu Connexion </a>
+    
+                              <% } else { %>
+                              
+                                              <button type="submit" name="register" value="Valider"> Valider Changement </button>
+                </form>
+                
+            
+                <br>
+            
+                <div class="divider">
+                    <span class="or-text">OU</span>
+                </div>
+                <br>
+                <br>
+                               <a href="/" class="signup-link"> Retour menu Connexion </a>
+    
+                                              <% } %>
+            </div>
+            <div style="border: 2px solid black; width: 98%; height: 20%; margin-top: 20px; display: flex; justify-content: center; align-items: center;">
+                <span style="padding: 2px;"> Je veux juste un lien de connexion sans changer mdp? </span>
+                <a href="/menu" class="signup-link">Lien Connexion</a>
+                
+            </div>
+        </div>
+    </div>
+                      <% if (situation !== "menu") { %>
+    <footer>
+        Barbedet Anthony production | Polytech school | © 2024 Tournament
+    </footer>
+                <% } %>
+
+    <script>
+        // Fonction pour faire défiler les images automatiquement dans le carrousel
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel img');
+        
+        setInterval(() => {
+            images[currentIndex].style.opacity = 0; // Masquer l'image actuelle
+            currentIndex = (currentIndex + 1) % images.length; // Passer à l'image suivante
+            images[currentIndex].style.opacity = 1; // Afficher la nouvelle image
+        }, 5000); // Changer d'image toutes les 5 secondes
+    </script>
+</body>
+</html>

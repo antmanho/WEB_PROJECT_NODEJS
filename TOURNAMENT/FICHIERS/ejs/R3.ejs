@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des tournois</title>
+    <link rel="stylesheet" type="text/css" href="/css/fichier1.css">
+
+    <!-- Lier le fichier CSS -->
+    
+</head>
+<body>
+<br>
+
+<% if (typeof id !== 'undefined') { %>
+<div id="header" style="width: 100%; height: 1.5vh; background-color: white; z-index: 1000;">
+    <div style="text-align: center;">
+        <br>
+        <h1>DETAIL TOURNOIS :</h1>
+    </div>
+    <a href="/R2" style="position: absolute; top: 20px; left: 20px;">
+        <img src="IMAGE/retour.png" alt="Retour" style="width: 50px; height: 50px;">
+    </a>
+    <br><br>
+
+<% } else { %>
+<div style="display: flex; align-items: center; width: 100%">
+
+    <!-- Affichage de la barre de recherche -->
+    <div style="flex-grow: 1;">
+        <form method="get" action="/R3" style="display: flex;">
+            <input type="text" name="search" placeholder="Rechercher..." value="<%= typeof search !== 'undefined' ? search : '' %>" style="flex-grow: 1; height: 5vh; border: 2px solid black; outline: none; font-size: 2vw;" />
+      <input id="search-button" type="submit" Value=""/>
+        </form>
+    </div>
+
+    <!-- Affichage du bouton "Filtrer" -->
+    <div>
+        <button id="reglage-button" onclick="openFilterPopup()"></button>'
+    </div>
+
+</div>
+                        <% } %>
+<br>
+
+<!-- Affichage de la pop-up de filtre -->
+<div id="filterPopup" class="modal filter-popup">
+    <div class="modal-content filter-content">
+        <span class="close filter-close" onclick="closeFilterPopup()">&times;</span>
+        <h3 class="filter-title">Filtres</h3>
+        <form id="filterForm" class="optional-fields">
+            <label for="publicCheckbox">Tournois publics :</label>
+            <input type="checkbox" id="publicCheckbox" name="public">
+            <br>
+            <label for="publicCheckbox2">Tournois disponibles sans devoir partager son numéro :</label>
+            <input type="checkbox" id="publicCheckbox2" name="public2">
+            <br>
+            <label for="nbrEquipe">Nombre de joueur par équipes :</label>
+            <input type="number" id="nbrEquipe" name="nbr_equipe">
+            <br>
+            <label for="activite">Activité :</label>
+            <input type="text" id="activite" name="activite">
+            <br>
+            <label for="cashPrizeMin">Cash Prize minimum :</label>
+            <input type="number" id="cashPrizeMin" name="cash_prize_min">
+            <br>
+            <label for="coutTournoisMax">Coût Tournois maximum :</label>
+            <input type="number" id="coutTournoisMax" name="cout_tournois_max">
+            <button type="button" onclick="applyFilters()">Appliquer</button>
+            <!-- Ajout du bouton "Réinitialiser" -->
+            <button type="button" onclick="resetFilters()">Réinitialiser</button>
+        </form>
+    </div>
+</div>
+
+<div style='display: flex; flex-direction: column; justify-content: center; align-items: center;'>
+    <% if (tournaments.length > 0) { %>
+        <table border='1' style='width: 100%;background-color: white;'>
+            <tr>
+                <th>Nom</th>
+                <th>Date</th>
+                <th>Lieu</th>
+                <th>Contact</th>
+                <th>Info</th>
+                <th>Bouton</th>
+            </tr>
+            <% tournaments.forEach(tournament => { %>
+                <tr class="<%= tournament.cash_prize > 0 ? 'cash-prize' : '' %>">
+                    <td><br><%= tournament.nom_tournois %><br></td>
+                                       <td><%= tournament.date_formatted %> <br><br><br> <%= tournament.h_tournois %>H<%= tournament.m_tournois %></td>
+                    <td class='buttons-column'>
+                        <% if (tournament.prive == 1) { %>
+                            PRIVE
+                        <% } else { %>
+                            <div class='container'>
+                                <p id='texteACopier'><%= tournament.lieu_tournois %></p>
+                                <button onclick='copierLieu()'> Copier </button>
+                            </div>
+                        <% } %>
+                    </td>
+                    <td class='buttons-column'>
+                        <% if (tournament.prive == 1) { %>
+                            <p><br>PRIVE </p>
+                        <% } else { %>
+                            <div class='container'>
+                                <p id='texteACopier2'><%= tournament.numero_telephone %></p>
+                                <button onclick='copierNum()'> Copier </button>
+                            </div>
+                        <% } %>
+                    </td>
+                                       <td>
+    <br><br><br>
+    <%= tournament.nombre_participants %>/<%= tournament.place_maximum %> participants
+    <% if (tournament.cash_prize > 0) { %>
+       | <%= tournament.cash_prize %>€ de récompense | <%= tournament.cout_tournois %>€ prix d'entrée
+    <% } %>
+                <br><br><br>
+
+            <br>
+            <button onclick='showInfo("<%= tournament.plus_info %>")' style='width: 97%;'>+information</button>
+    
+</td>
+                                            
+                                            
+<td class='buttons-column'>
+    <% if (tournament.decision === "accepter") { %>
+        Demande Accepté
+    <% } else if (tournament.decision === "refuser") { %>
+        Demande Refusé
+    <% } else if (tournament.decision === "en_attente") { %>
+        En attente
+                <br><br>
+<button type="button" onclick="submitMessForm('<%= tournament.createur %>')" style="height: 4vh;">MESSAGERIE ANONYME</button>
+<button type="button" onclick="submitForm(<%= tournament.id_tournois %>)" style="height: 4vh;">ANNULER MA DEMANDE</button>
+
+
+
+
+    <% } %>
+</td>
+
+
+                </tr>
+            <% }); %>
+        </table>
+    <% } else { %>
+        <br><br> <br><h1> Aucuns tournois trouvé </h1><br><br>
+    <% } %>
+</div>
+
+<script>
+     function showInfo(info) {
+        console.log(info);
+         alert(info);
+     }
+    function showPopup() {
+        alert("Ce logo signifie que vous êtes obligé de donner votre téléphone au créateur pour pouvoir participer.");
+    }
+    // Fonction pour réinitialiser les filtres
+    function resetFilters() {
+    // Réinitialiser les valeurs des champs de filtre à leurs valeurs par défaut
+        document.getElementById("publicCheckbox").checked = false;
+        document.getElementById("publicCheckbox2").checked = false;
+        document.getElementById("nbrEquipe").value = "";
+        document.getElementById("activite").value = "";
+        document.getElementById("cashPrizeMin").value = "";
+        document.getElementById("coutTournoisMax").value = "";
+    }
+    // Fonction pour fermer la pop-up de filtre
+    function closeFilterPopup() {
+        document.getElementById("filterPopup").style.display = "none";
+    }
+    // Fonction pour fermer la pop-up de filtre
+    function closeNumeroPopup() {
+      document.getElementById("NumeroPopup").style.display = "none";
+    }
+    // Fonction pour ouvrir la pop-up de filtre  MET PAS DS JS
+ function openFilterPopup() {
+    document.getElementById("filterPopup").style.display = "block";
+    
+    // Remplir les champs de filtre avec les valeurs précédemment saisies (s'il y en a)
+    document.getElementById("publicCheckbox").checked = <%= public ? 'true' : 'false' %>;
+    document.getElementById("publicCheckbox2").checked = <%= public2 ? 'true' : 'false' %>;
+    document.getElementById("nbrEquipe").value = '<%= nbr_equipe %>';
+    document.getElementById("activite").value = '<%= activite %>';
+    document.getElementById("cashPrizeMin").value = '<%= cash_prize_min %>';
+    document.getElementById("coutTournoisMax").value = '<%= cout_tournois_max %>';
+}
+ 
+    // Fonction pour ouvrir la pop-up de filtre  MET PAS DS JS
+function openNumeroPopup(x, y, z) {
+    // Afficher la pop-up
+    document.getElementById("NumeroPopup").style.display = "block";
+    
+    // Attribuer les valeurs aux champs du formulaire
+    document.getElementById("NumeroForm").querySelector("input[id='id_tournoi']").value = x;
+    document.getElementById("NumeroForm").querySelector("input[id='createur']").value = y;
+    document.getElementById("NumeroForm").querySelector("input[id='prive']").value = z;
+    
+    // Utiliser les valeurs JavaScript au lieu de PHP pour remplir le champ num
+    document.getElementById("num").value = '';
+}
+
+    // Fonction pour appliquer les filtres
+    function applyFilters() {
+        var publicCheckbox = document.getElementById("publicCheckbox");
+        var isChecked = publicCheckbox.checked;
+        
+        var publicCheckbox2 = document.getElementById("publicCheckbox2");
+        var isChecked2 = publicCheckbox2.checked;
+    // Récupérer le nombre d'équipes saisi par l'utilisateur
+        var nbrEquipe = document.getElementById("nbrEquipe").value.trim();
+        nbrEquipe = nbrEquipe === "" ? "" : nbrEquipe;
+
+    // Récupérer le texte saisi par l'utilisateur pour le filtre par activité
+        var activite = document.getElementById("activite").value.trim();
+        activite = activite === "" ? "" : activite;
+
+    // Récupérer le montant minimum du cash prize saisi par l'utilisateur
+        var cashPrizeMin = document.getElementById("cashPrizeMin").value.trim();
+        cashPrizeMin = cashPrizeMin === "" ? "" : cashPrizeMin;
+
+    // Récupérer le coût maximum du tournoi saisi par l'utilisateur
+        var coutTournoisMax = document.getElementById("coutTournoisMax").value.trim();
+        coutTournoisMax = coutTournoisMax === "" ? "" : coutTournoisMax;
+
+    // Construire l'URL avec seulement les paramètres non vides
+        var url = window.location.origin + window.location.pathname;
+        var params = [];
+
+        if (isChecked) {
+            params.push('public=1');
+        }
+        if (isChecked2) {
+            params.push('public2=1');
+        }
+        if (nbrEquipe !== '') {
+            params.push('nbr_equipe=' + nbrEquipe);
+        }
+        if (activite !== '') {
+            params.push('activite=' + activite);
+        }
+        if (cashPrizeMin !== '') {
+            params.push('cash_prize_min=' + cashPrizeMin);
+        }
+        if (coutTournoisMax !== '') {
+            params.push('cout_tournois_max=' + coutTournoisMax);
+        }
+
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+
+        window.location.href = url;
+    }
+    // Fonction pour valider le numéro de téléphone
+    function numerovalide() {
+        // Récupérer la valeur du champ de numéro de téléphone
+        var numeroInput = document.getElementById('num');
+        var numero = numeroInput.value;
+
+        // Valider le numéro de téléphone
+        if (numero.length < 10 || !numero.startsWith('0') && !numero.startsWith('+')) {
+            // Afficher un message d'erreur si la validation échoue
+            return false; // Le numéro n'est pas valide
+        } else {
+            // Le numéro est valide
+            return true;
+        }
+    }
+
+    // Fonction pour valider le formulaire
+    function validateForm() {
+        if (numerovalide()) {
+            
+            document.getElementById("NumeroForm").submit(); // Soumettre le formulaire si le numéro est valide
+
+        } else {
+            // Afficher un message d'erreur si le numéro n'est pas valide
+            alert("Le numéro n'est pas valide. Veuillez corriger avant de soumettre le formulaire.");
+        }
+    }
+// Fonction pour ouvrir la pop-up d'inscription
+function openInscriptionPopup() {
+    document.getElementById("inscriptionPopup").style.display = "block";
+}
+
+// Fonction pour fermer la pop-up d'inscription
+function closeInscriptionPopup() {
+    document.getElementById("inscriptionPopup").style.display = "none";
+}
+function copierLieu() {
+  // Sélectionner le texte à copier
+  var texte = document.getElementById("texteACopier");
+
+  // Créer une zone de texte temporaire pour copier le texte
+  var zoneTemporaire = document.createElement("textarea");
+  zoneTemporaire.value = texte.innerText;
+
+  // Ajouter la zone temporaire à la page
+  document.body.appendChild(zoneTemporaire);
+
+  // Sélectionner le texte dans la zone temporaire
+  zoneTemporaire.select();
+  zoneTemporaire.setSelectionRange(0, 99999); // Pour les navigateurs mobiles
+
+  // Copier le texte sélectionné
+  document.execCommand("copy");
+
+  // Supprimer la zone temporaire
+  document.body.removeChild(zoneTemporaire);
+
+}
+function copierNum() {
+  // Sélectionner le texte à copier
+  var texte = document.getElementById("texteACopier2");
+
+  // Créer une zone de texte temporaire pour copier le texte
+  var zoneTemporaire = document.createElement("textarea");
+  zoneTemporaire.value = texte.innerText;
+
+  // Ajouter la zone temporaire à la page
+  document.body.appendChild(zoneTemporaire);
+
+  // Sélectionner le texte dans la zone temporaire
+  zoneTemporaire.select();
+  zoneTemporaire.setSelectionRange(0, 99999); // Pour les navigateurs mobiles
+
+  // Copier le texte sélectionné
+  document.execCommand("copy");
+
+  // Supprimer la zone temporaire
+  document.body.removeChild(zoneTemporaire);
+
+}
+
+
+function submitMessForm(crea) {
+    // Création dynamique du formulaire avec les données de la ligne $row
+    var form = document.createElement('form');
+    form.setAttribute('id', 'mess');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('action', '/messagerie');
+
+    // Création d'éléments input pour les données de la ligne $row
+    var inputEmailConnecte = document.createElement('input');
+    inputEmailConnecte.setAttribute('type', 'hidden');
+    inputEmailConnecte.setAttribute('name', 'participant');
+    inputEmailConnecte.setAttribute('value', '<%= email_connecte %>');
+    form.appendChild(inputEmailConnecte);
+
+    var inputPretendant = document.createElement('input');
+    inputPretendant.setAttribute('type', 'hidden');
+    inputPretendant.setAttribute('name', 'createur');
+    inputPretendant.setAttribute('value', crea);
+    form.appendChild(inputPretendant);
+
+    // Ajout du formulaire à la page et soumission
+    document.body.appendChild(form);
+    form.submit();
+}
+function submitForm( id) {
+   
+    // Création dynamique du formulaire avec les données de la ligne $row
+    var form = document.createElement('form');
+    form.setAttribute('method', 'POST');
+    form.setAttribute('action', '/R3_annuler'); // Assurez-vous que l'action est correcte
+    form.setAttribute('class', 'optional-fields');
+    form.style.display = 'none'; // Le formulaire est caché
+
+    // Création d'éléments input pour les données de la ligne $row
+    var inputIdTournoi = document.createElement('input');
+    inputIdTournoi.setAttribute('type', 'hidden');
+    inputIdTournoi.setAttribute('name', 'id_tournoi');
+    inputIdTournoi.setAttribute('value', id);
+    form.appendChild(inputIdTournoi);
+
+    var inputEmailConnecte = document.createElement('input');
+    inputEmailConnecte.setAttribute('type', 'hidden');
+    inputEmailConnecte.setAttribute('name', 'email_connecte');
+    inputEmailConnecte.setAttribute('value', '<%= email_connecte %>'); // Assurez-vous que $email_connecte est disponible ici
+    form.appendChild(inputEmailConnecte);
+
+    // Ajout du formulaire à la page et soumission
+    document.body.appendChild(form);
+    form.submit();
+}
+
+
+
+
+</script>
+</body>
+</html>
+

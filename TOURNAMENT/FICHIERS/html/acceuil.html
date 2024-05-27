@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carré de divs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .welcome-section {
+            background-color: #f8f8f8;
+            padding: 50px 20px;
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            height: calc(100vh - 150px); /* Adjusted height */
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .div1, .div2, .div3, .div4 {
+            width: calc(45% - 5px); /* Adjusted width */
+            height: calc(45% - 5px); /* Adjusted height */
+            box-sizing: border-box;
+            position: relative;
+            margin: 5px;
+        }
+        .div2 img, .div3 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .div2 img.active, .div3 img.active {
+            opacity: 1;
+        }
+        .faq-section {
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .faq-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .faq {
+            margin-bottom: 20px;
+        }
+        .faq h3 {
+            margin: 0 0 10px;
+        }
+        .faq p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-section">
+        <h1>Bienvenue sur Tournament !</h1>
+    </div>
+    <div class="container">
+        <div class="div1">
+            <div class="faq">
+                <h3 style="text-align: center;">Quel est le but de ce site ?</h3>
+                <br>
+                <p>Le but de Tournament est de permettre aux utilisateurs de créer des liens sociaux en participant à des tournois de jeux de société, de sport, et plus encore. Vous pouvez aussi organiser des tournois pour gagner de l'argent ou des récompenses.</p>
+            </div>
+        </div> <!-- Haut à gauche -->
+        <div class="div2" style="background-color: #333;">
+            <img src="IMAGE/acc4.png" alt="Image 1" class="active">
+            <img src="IMAGE/acc2.png" alt="Image 2">
+        </div> <!-- Haut à droite -->
+        <div class="div3" style="background-color: #333;">
+            <img src="IMAGE/acc3.png" alt="Image 1" class="active">
+            <img src="IMAGE/acc1.png" alt="Image 2">
+        </div> <!-- Bas à gauche -->
+        <div class="div4">
+            <div class="faq">
+                <h3 style="text-align: center;">Créer</h3>
+                <br>
+                <p>Pour créer un tournoi, inscrivez-vous ou connectez-vous à votre compte, puis cliquez sur le bouton "Créer un tournoi". Remplissez les détails du tournoi, y compris le nom, la description, les règles et les dates. Une fois que vous avez terminé, cliquez sur "Publier" pour rendre votre tournoi visible aux autres utilisateurs.</p>
+            </div>
+            <div class="faq">
+                <h3 style="text-align: center;">Rejoindre</h3>
+                <br>
+                <p>Pour rejoindre un tournoi, parcourez la liste des tournois disponibles sur la page d'accueil ou utilisez la fonction de recherche pour trouver un tournoi spécifique. Cliquez sur le tournoi de votre choix, puis suivez les instructions pour vous inscrire. Assurez-vous de respecter les règles et les dates du tournoi.</p>
+            </div>
+        </div> <!-- Bas à droite -->
+    </div>
+
+    <script>
+        const div2Images = document.querySelectorAll('.div2 img');
+        const div3Images = document.querySelectorAll('.div3 img');
+
+        let currentIndex2 = 0;
+        let currentIndex3 = 0;
+
+        function showNextImage(images, currentIndex) {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % images.length;
+            images[currentIndex].classList.add('active');
+            return currentIndex;
+        }
+
+        setInterval(() => {
+            currentIndex2 = showNextImage(div2Images, currentIndex2);
+            currentIndex3 = showNextImage(div3Images, currentIndex3);
+        }, 6000); // Change image every 3 seconds
+    </script>
+</body>
+</html>

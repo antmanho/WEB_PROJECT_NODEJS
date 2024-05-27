@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel War</title>
+    <style>
+
+        table {
+            border-collapse: collapse;
+        }
+table {
+           width: 100%;
+           border-collapse: collapse;
+       }
+       td {
+           width: calc(100% / 50); /* Chaque ligne contient 50 cellules */
+           padding-bottom: calc(100% / 50); /* Assurez-vous que chaque cellule est un carré */
+           border: 1px solid #000;
+       }
+h2 {
+
+    text-align: center;
+    margin: 0 auto; /* Pour centrer horizontalement */
+    font-size: 3vw;
+}
+.container {
+    width : 98%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-panel,
+.center-panel,
+.right-panel {
+    border: 2px solid black;
+    padding: 0.5vw; /* Utilisation de vw pour le padding */
+    margin: 0.5vw; /* Utilisation de vw pour le margin */
+    width: calc(33.33% - 2vw);
+    
+}
+
+.center-panel {
+    margin: 0 auto;
+}
+
+/* Taille de police proportionnelle à la largeur de la fenêtre */
+p,
+ul {
+    font-size: 2vw;
+    text-align: center;
+}
+#ranking-list {
+    list-style-type: none;
+    padding: 0; /* Pour enlever le padding par défaut de la liste */
+}
+#colorPicker {
+         width: 50%; /* Largeur de l'input */
+         height: 8vh; /* Hauteur de l'input */
+         margin: 0 auto; /* Centrer l'input */
+         display: block; /* Pour centrer */
+     }
+         h1 {
+        font-size: 4vw;
+        text-align: center;
+        margin: 0 auto; /* Pour centrer horizontalement */
+    }
+    </style>
+</head>
+<body>
+<br>
+    <h1> Pixel War </h1>
+    <br>
+
+<div class="container">
+    <div class="left-panel">
+<h2>Jouer</h2>
+        <p id="pixel-placee"></p>
+        <p id="pixel-restant"></p>
+        <p>Choisissez une couleur et cliquez sur un pixel pour le colorer :</p>
+        <input type="color" id="colorPicker">
+    </div>
+    <div class="center-panel">
+        <h2>Classement</h2>
+        <ul id="ranking-list">
+            <!-- Le contenu du classement sera ajouté ici par JavaScript -->
+        </ul>
+        <p>...</p>
+        <p id="pixel-score"></p>
+    </div>
+    <div class="right-panel">
+<h2>Visuel </h2>
+<br>
+
+<table id="pixel-table2" style="width=100% ;">
+    <!-- Génération de la grille de pixels en JavaScript -->
+</table>
+
+
+    </div>
+</div>
+   
+<br>
+    <table id="pixel-table" style="width=100% ;">
+        <!-- Génération de la grille de pixels en JavaScript -->
+    </table>
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        let requestCounter = 0; // Variable pour compter les requêtes reçues du serveur
+        
+           const ws = new WebSocket('wss://anthonybarbedet.com:8080'); //Connectez-vous au serveur WebSocket
+
+        ws.onopen = function () {
+            console.log('Connexion établie.');
+
+            // Envoyer une demande pour obtenir les données initiales de la grille
+            ws.send(JSON.stringify({ action: 'get_initial_data' }));
+        };
+
+        ws.onmessage = function (event) {
+            const jsonData = JSON.parse(event.data);
+            console.log('Données reçues du serveur WebSocket :', jsonData); // Vérifiez la
+
+            requestCounter++; // Incrémentez le compteur de requêtes
+            if (jsonData.tableName !== 'PIXEL_WARS' && jsonData.tableName !== 'UTILISATEUR') {
+                    // Si les données reçues ne proviennent pas des tables PIXEL_WARS ou UTILISATEUR, ignorer le traitement
+                    console.log('Données non pertinentes. Ignorer...');
+                    return;
+                }
+            if (requestCounter === 1) {
+                // Traitement des données initiales de la grille
+                const pixelData = jsonData.data;
+                
+                // Création de la grille de pixels
+                const maxX = 50;
+                const maxY = 40;
+                const pixelTable = document.getElementById('pixel-table');
+                const pixelTable2 = document.getElementById('pixel-table2');
+                
+                for (let y = 0; y < maxY; y++) {
+                    const row = document.createElement('tr');
+                    for (let x = 0; x < maxX; x++) {
+                        const cell = document.createElement('td');
+                        cell.style.backgroundColor = "#ffffff"; // Par défaut, le pixel est blanc
+                        cell.dataset.x = x; // Ajouter l'attribut de données pour la coordonnée x
+                        cell.dataset.y = y; // Ajouter l'attribut de données pour la coordonnée y
+                        row.appendChild(cell);
+                    }
+                    pixelTable.appendChild(row);
+                }
+                // Mettre à jour les pixels avec les données initiales de la grille
+                pixelData.forEach(pixel => {
+                                  const cellToUpdate = document.querySelector(`td[data-x="${pixel.x}"][data-y="${pixel.y}"]`);
+                                  if (cellToUpdate) {
+                                  cellToUpdate.style.backgroundColor = pixel.couleur;
+                                  }
+                                  });
+                for (let y = 0; y < maxY; y++) {
+                    const row = document.createElement('tr');
+                    for (let x = 0; x < maxX; x++) {
+                        const cell = document.createElement('td');
+                        cell.style.backgroundColor = "#ffffff"; // Par défaut, le pixel est blanc
+                        cell.dataset.x = x; // Ajouter l'attribut de données pour la coordonnée x
+                        cell.dataset.y = y; // Ajouter l'attribut de données pour la coordonnée y
+                        row.appendChild(cell);
+                    }
+                    pixelTable2.appendChild(row);
+                }
+                
+                // Mettre à jour les pixels avec les données initiales de la grille
+                pixelData.forEach(pixel => {
+                                  const cellToUpdate = document.querySelector(`td[data-x="${pixel.x}"][data-y="${pixel.y}"]`);
+                                  if (cellToUpdate) {
+                                  cellToUpdate.style.backgroundColor = pixel.couleur;
+                                  }
+                                  });
+               
+            }
+            
+            else {
+                // Mettre à jour les pixels avec les données reçues du serveur
+                const pixelData = jsonData.data;
+                pixelData.forEach(pixel => {
+                    const cellToUpdate1 = document.querySelector(`#pixel-table td[data-x="${pixel.x}"][data-y="${pixel.y}"]`);
+                    const cellToUpdate2 = document.querySelector(`#pixel-table2 td[data-x="${pixel.x}"][data-y="${pixel.y}"]`);
+                    if (cellToUpdate1) {
+                        cellToUpdate1.style.backgroundColor = pixel.couleur;
+                    }
+                    if (cellToUpdate2) {
+                        cellToUpdate2.style.backgroundColor = pixel.couleur;
+                    }
+                });
+            }
+
+            
+            // Filtrer les données pour obtenir uniquement celles correspondant à l'utilisateur connecté
+            const userData = jsonData.data.find(user => user.email === "<%= email_connecte %>");
+
+            // Maintenant userData contient les données de l'utilisateur connecté
+            if (userData) {
+                const pixelWarPlace = userData.pixel_war_placé; // Valeur de pixel_war_place
+                const pixelWarRestant = userData.pixel_war_restant; // Valeur de pixel_war_restant
+
+                // Affichez ces valeurs où vous le souhaitez dans votre page HTML
+                // Par exemple, vous pouvez les ajouter à un élément HTML avec un identifiant spécifique
+                document.getElementById('pixel-placee').innerHTML = `PIXEL PLACE : ${pixelWarPlace}<br> `;
+                document.getElementById('pixel-restant').innerHTML = `PIXEL RESTANT: ${pixelWarRestant}`;
+                document.getElementById('pixel-score').innerHTML = `MON SCORE : ${pixelWarPlace}`;
+            }
+
+            // Générer le classement des 5 meilleurs joueurs
+            const topPlayers = jsonData.data.sort((a, b) => b.pixel_war_placé - a.pixel_war_placé).slice(0, 3); // Modifier le 6 en 5
+
+            const rankingList = document.getElementById('ranking-list');
+            rankingList.innerHTML = ''; // Effacer le contenu précédent de la liste
+            console.log("/*preparation liste*/");
+            topPlayers.forEach((player, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1} / ${player.email}  (${player.pixel_war_placé}) `;
+                console.log(listItem.textContent);
+                rankingList.appendChild(listItem);
+                               // Ajouter un saut de ligne après chaque élément de liste
+                                  rankingList.appendChild(document.createElement("br"));
+            });
+        };
+
+        // Fonction pour placer un pixel
+        function placerPixel(x, y, couleur) {
+            // Vérifier si l'utilisateur a des pixels restants
+            // Continuer avec le placement du pixel
+            console.log('Pixel placé : x = ' + x + ', y = ' + y + ', couleur = ' + couleur);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/ajouter_pixel", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log('Réponse du serveur : ' + xhr.responseText);
+                }
+            };
+            xhr.send("x=" + x + "&y=" + y + "&couleur=" + encodeURIComponent(couleur));
+        }
+
+
+        // Événement lors du clic sur un pixel seulement si pixel restant >0
+        $('#pixel-table').on('click', 'td', function() {
+                             const pixelWarRestantString = document.getElementById('pixel-restant').innerText.match(/-?\d+/);
+                             const pixelWarRestant = pixelWarRestantString ? parseInt(pixelWarRestantString[0]) : 0;
+
+                             console.log(pixelWarRestant);
+                             if (pixelWarRestant <= 0) {
+                                 // Afficher un message ou prendre toute autre action nécessaire
+                                 console.log('Vous n\'avez plus de pixels restants.');
+                                 return; // Arrêter l'exécution de la fonction si l'utilisateur n'a plus de pixels restants
+                             }
+else{
+            var couleur = $('#colorPicker').val();
+            var x = $(this).data('x');
+            var y = $(this).data('y');
+
+            // Mettre à jour la couleur du pixel sur la page
+            $(this).css('background-color', couleur);
+
+            // Appeler la fonction pour placer le pixels
+            placerPixel(x, y, couleur);
+                             }
+        });
+    </script>
+</body>
+</html>
+

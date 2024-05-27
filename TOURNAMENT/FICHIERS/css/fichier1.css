@@ -1,0 +1,209 @@
+/* Ajoutez cette classe pour centrer le titre */
+.filter-title {
+    font-size: 5vw;
+    text-align: center;
+    margin: 0 auto; /* Centrage horizontal */
+}
+
+.info-button,
+.star-button {
+    margin-left: 0px; /* Réduire la marge entre les boutons */
+    margin-right: 0px; /* Réduire la marge entre les boutons */
+}
+
+.container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Style pour les tournois avec cash prize */
+.cash-prize {
+    background-color: #FFDE0A;
+}
+
+/* Style de la boîte modale */
+.modal {
+    display: none; /* Par défaut, la boîte modale est cachée */
+    position: fixed; /* Position fixe pour la boîte modale */
+    z-index: 1; /* Mettre la boîte modale au-dessus de tout le reste */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur pleine de la boîte modale */
+    height: 100%; /* Hauteur pleine de la boîte modale */
+    overflow: auto; /* Activer le défilement si nécessaire */
+    background-color: rgba(0,0,0,0.4); /* Fond sombre semi-transparent */
+}
+
+/* Contenu de la boîte modale */
+.modal-content {
+    background-color: #fefefe; /* Fond blanc de la boîte modale */
+    margin: 15% auto; /* Centrer la boîte modale verticalement */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largeur de la boîte modale */
+}
+
+/* Bouton de fermeture de la boîte modale */
+.close {
+    color: #aaaaaa; /* Couleur du texte */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000; /* Couleur du texte lorsqu'il est survolé */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Style du formulaire de filtrage */
+.optional-fields {
+    margin-bottom: 10px;
+}
+
+/* Style des champs de formulaire */
+.optional-fields input[type='checkbox'],
+.optional-fields input[type='number'],
+.optional-fields input[type='text'] {
+    margin-bottom: 5px;
+    width: 100%; /* Largeur pleine des champs */
+}
+
+/* Style du bouton de validation */
+.optional-fields input[type='submit'] {
+    background-color: #4CAF50; /* Couleur de fond verte */
+    color: white; /* Couleur du texte */
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.optional-fields input[type='submit']:hover {
+    background-color: #45a049; /* Couleur de fond verte plus foncée lorsqu'il est survolé */
+}
+
+/* Style de la pop-up de filtre */
+.filter-popup {
+    display: none; /* Par défaut, la pop-up de filtre est cachée */
+    position: fixed; /* Position fixe pour la pop-up de filtre */
+    z-index: 1; /* Mettre la pop-up de filtre au-dessus de tout le reste */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largeur pleine de la pop-up de filtre */
+    height: 100%; /* Hauteur pleine de la pop-up de filtre */
+    overflow: auto; /* Activer le défilement si nécessaire */
+    background-color: rgba(0,0,0,0.4); /* Fond sombre semi-transparent */
+}
+
+/* Contenu de la pop-up de filtre */
+.filter-content {
+    background-color: #fefefe; /* Fond blanc de la pop-up de filtre */
+    margin: 15% auto; /* Centrer la pop-up de filtre verticalement */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largeur de la pop-up de filtre */
+}
+
+/* Bouton de fermeture de la pop-up de filtre */
+.filter-close {
+    color: #aaaaaa; /* Couleur du texte */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.filter-close:hover,
+.filter-close:focus {
+    color: #000; /* Couleur du texte lorsqu'il est survolé */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+td {
+    font-size: 2vw; /* Taille de la police proportionnelle à la largeur de la fenêtre */
+    border: 2px solid black; /* Bordure noire de 2 pixels */
+    text-align: center; /* Centrage du texte */
+}
+
+th {
+    font-size: 3vw; /* Taille de la police pour les en-têtes */
+    font-weight: bold; /* Texte en gras */
+    border: 2px solid black; /* Bordure noire de 2 pixels */
+    text-align: center; /* Centrage du texte */
+}
+table th, table td {
+    padding: 0; /* Supprimer l'espacement interne */
+    border: 1px solid black; /* Bordure noire */
+    vertical-align: middle; /* Centrer verticalement le contenu */
+    text-align: center; /* Centrer le texte */
+    height: 10px; /* Définir la hauteur des cellules */
+    font-size: 1.5vw; /* Réduire la taille de la police pour ajuster le contenu */
+    line-height: 10px; /* Définir la hauteur de ligne pour correspondre à la hauteur des cellules */
+}
+
+table th {
+    background-color: #f2f2f2; /* Couleur de fond pour les en-têtes */
+    font-size: 2vw; /* Réduire la taille de la police pour les en-têtes */
+    line-height: 3vw; /* Définir la hauteur de ligne pour correspondre à la hauteur des cellules */
+}
+
+
+/* Style pour la colonne des boutons */
+td.buttons-column button {
+    width: 100%;
+}
+
+#back-to-top {
+    position: fixed;
+    top: 1px;
+    left: 1px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#back-to-top:hover {
+    transform: scale(1.1);
+}
+
+h1 {
+    text-align: center;
+    margin: 0 auto; /* Pour centrer horizontalement */
+}
+
+#search-button {
+    width: 5%; /* Ajustez la taille selon vos besoins */
+    height: 5.7vh; /* Ajustez la taille selon vos besoins */
+    background: url('../IMAGE/rechercher.png') no-repeat center center;
+    background-size: contain; /* Assure que l'image est contenue dans le bouton */
+    border: none; /* Retirez la bordure si nécessaire */
+    cursor: pointer; /* Change le curseur pour pointer */
+    text-indent: -9999px; /* Masque le texte du bouton */
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+#reglage-button {
+    width: 5%; /* Ajustez la taille selon vos besoins */
+    height: 5vh; /* Ajustez la taille selon vos besoins */
+    background: url('../IMAGE/reglage.png') no-repeat center center;
+    background-size: contain; /* Assure que l'image est contenue dans le bouton */
+    border: none; /* Retirez la bordure si nécessaire */
+    cursor: pointer; /* Change le curseur pour pointer */
+    text-indent: -9999px; /* Masque le texte du bouton */
+}

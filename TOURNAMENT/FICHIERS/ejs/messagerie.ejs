@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'envoi de message</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 16px; /* Définir la taille de police de base */
+            font-family: Arial, sans-serif; /* Choisir une police de caractères */
+        }
+
+        .message-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+        .message-container.antho {
+            justify-content: flex-end;
+        }
+.message-bubble {
+    background-color: #DCF8C6;
+    border-radius: 10px;
+    padding: 0.4vw;
+    max-width: 70%;
+    font-size: 3vw;
+    margin: 0vw 0.8vw; /* Ajouter une marge verticale de 0.3vw et une marge horizontale de 1vw */
+}
+        .message-bubble.antho {
+            background-color: #E0E0E0;
+        }
+        .message-content {
+            margin: 0;
+        }
+        #back-to-top {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        #back-to-top:hover {
+            transform: scale(1.1);
+        }
+        #contenu-container {
+            display: flex;
+            align-items: center;
+        }
+        #contenu {
+            width: 95%; /* Ajuster la largeur selon vos besoins */
+            height: 8vh;
+            font-size: 3vw; /* Taille de la police proportionnelle à la largeur */
+            border: 2px solid black;
+        }
+#send-button {
+    background-image: url('IMAGE/envoie.png'); /* Changer l'image par votre image de bouton */
+    background-size: 100% 100%;
+    width: 5%;
+    height: 8vh;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+        #send-button:hover {
+            transform: scale(1.1);
+        }
+        h1 {
+
+            text-align: center;
+            margin: 0 auto; /* Pour centrer horizontalement */
+            font-size: 7vw;
+        }
+
+        /* Style pour le fond gris clair */
+        #messages-wrapper {
+background-color: #f5f5f5; /* Couleur de fond gris clair */
+            min-height: calc(100vh - 120px); /* Calculer la hauteur pour couvrir la page */
+            padding-bottom: 2vw; /* Ajouter un espace en bas pour le contenu */
+        }
+    </style>
+</head>
+<body>
+    <h1>MESSAGERIE</h1>
+    <form id="messageForm" onsubmit="sendMessage(); return false;">
+        <div id="contenu-container">
+            <input type="text" id="contenu" name="contenu" placeholder="Contenu du message ..">
+            <button type="submit" id="send-button"></button>
+        </div>
+<input type="hidden" id="from_email" value="<%= from_email %>">
+<input type="hidden" id="to_email" value="<%= to_email %>">
+
+    </form>
+
+    <!-- Ajout d'un wrapper pour les messages avec le fond gris clair -->
+    <div id="messages-wrapper">
+<br>
+        <div id="messages">
+
+            <!-- Cette section sera remplie par les messages existants -->
+        </div>
+
+    </div>
+    <!-- Bouton de retour en haut à gauche -->
+<a href="<%= lien %>" id="back-to-top">
+    <img src="IMAGE/retour.png" alt="rretour" style="width: 100%; height: 100%;">
+</a>
+ <script>
+        // JavaScript pour redimensionner l'image lorsqu'elle est cliquée
+        document.getElementById('back-to-top').addEventListener('click', function() {
+            this.querySelector('img').style.transform = 'scale(1.1)';
+        });
+
+       const ws = new WebSocket('wss://anthonybarbedet.com:8080');
+        let requestCount = 0;
+
+        ws.onopen = function(event) {
+            console.log('Connexion établie.');
+        };
+
+ws.onmessage = function(event) {
+    // Nettoyer d'abord la section des messages
+    document.getElementById('messages').innerHTML = "";
+
+    console.log('Message reçu du serveur :', event.data);
+    
+    // Analyser le message JSON reçu
+    const messageData = JSON.parse(event.data);
+    
+    // Vérifier si le message appartient à la table MESSAGE
+    if (messageData.tableName === 'MESSAGE') {
+        // Récupérer les données de message
+        const messages = messageData.data;
+        
+        // Mettre à jour la section des messages
+        const messagesDiv = document.getElementById('messages');
+        
+        // Parcourir les messages dans l'ordre inverse
+        for (let i = messages.length - 1; i >= 0; i--) {
+            const message = messages[i];
+            
+            // Vérifier si le message correspond aux filtres
+            if ((message.from_email === document.getElementById('from_email').value ||
+                message.from_email === document.getElementById('to_email').value) &&
+                (message.to_email === document.getElementById('from_email').value ||
+                message.to_email === document.getElementById('to_email').value)) {
+                // Créer un conteneur de message
+                const messageContainer = document.createElement('div');
+                messageContainer.className = 'message-container';
+                // Déterminer la classe en fonction de l'expéditeur
+                if (message.from_email === document.getElementById('from_email').value) {
+                    messageContainer.classList.add('antho');
+                }
+
+                // Créer une bulle de message
+                const messageBubble = document.createElement('div');
+                messageBubble.className = 'message-bubble';
+                // Déterminer la classe en fonction de l'expéditeur
+                if (message.from_email === document.getElementById('from_email').value) {
+                    messageBubble.classList.add('antho');
+                }
+
+                // Ajouter le contenu du message à la bulle
+                const messageContent = document.createElement('p');
+                messageContent.className = 'message-content';
+                messageContent.textContent = message.contenu;
+                messageBubble.appendChild(messageContent);
+
+                // Ajouter la bulle de message au conteneur
+                messageContainer.appendChild(messageBubble);
+
+                // Ajouter le conteneur de message à la section des messages
+                messagesDiv.appendChild(messageContainer);
+            }
+        }
+
+        // Faire défiler jusqu'au dernier message
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+};
+
+        function sendMessage() {
+            var contenu = document.getElementById("contenu").value;
+            var from_email = document.getElementById("from_email").value;
+            var to_email = document.getElementById("to_email").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/submit_message", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Effacer le contenu du champ de texte
+                    document.getElementById("contenu").value = "";
+                }
+            };
+            xhr.send("contenu=" + encodeURIComponent(contenu) + "&from_email=" + encodeURIComponent(from_email) + "&to_email=" + encodeURIComponent(to_email));
+            
+            // Envoyer le nouveau message via WebSocket pour les autres clients
+            ws.send(JSON.stringify({ tableName: 'MESSAGE', data: { contenu: contenu, from_email: from_email, to_email: to_email } }));
+
+            // Incrémenter le compteur de requêtes
+            requestCount++;
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier un tournoi</title>
+     <style>
+        .optional-fields {
+            display: none;
+        }
+        .toggle-button {
+            cursor: pointer;
+            user-select: none;
+        }
+
+.centered-button {
+           width: 30%;
+           height: 10%;
+           font-size: 3vw;
+           display: block;
+           margin: 0 auto;
+           text-align: center;
+       }
+
+#m_tournois {
+    width: 10%; /* Définissez la largeur selon vos besoins */
+    height: 7vh; /* Ajustez la hauteur en fonction de la hauteur de la fenêtre */
+}
+#h_tournois {
+    width: 10%; /* Définissez la largeur selon vos besoins */
+    height: 7vh; /* Ajustez la hauteur en fonction de la hauteur de la fenêtre */
+}
+#date_tournois {
+    width: 60%; /* Définissez la largeur selon vos besoins */
+    height: 7vh; /* Ajustez la hauteur en fonction de la hauteur de la fenêtre */
+}
+  body {
+            margin: 0; /* Supprime les marges par défaut */
+            padding: 0; /* Supprime les padding par défaut */
+            height: 100vh; /* Définit la hauteur à 100% de la hauteur de la fenêtre */
+            position: relative; /* Position relative pour les enfants */
+            background-image: url('IMAGE/sport.jpg');
+            background-size: cover; /* Assure que l'image de fond couvre toute la fenêtre */
+            background-position: center; /* Centre l'image de fond */
+            background-repeat: no-repeat; /* Empêche la répétition de l'image de fond */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.90); /* Couleur d'arrière-plan semi-transparente */
+            z-index: -1; /* Place cette couche derrière le contenu de la page */
+        }
+.custom-select {
+            appearance: none; /* Supprime le style par défaut */
+            -webkit-appearance: none; /* Pour les navigateurs basés sur WebKit */
+            -moz-appearance: none; /* Pour les navigateurs basés sur Gecko */
+            width: 10%; /* Définissez la largeur selon vos besoins */
+            height: 5vh; /* Ajustez la hauteur en fonction de la hauteur de la fenêtre */
+            padding: 10px; /* Ajoutez un peu de rembourrage */
+            border: 1px solid #000; /* Ajoutez une bordure */
+            background-color: #fff; /* Fond blanc */
+            color: #000; /* Texte noir */
+            font-size: 16px; /* Taille de police */
+            cursor: pointer; /* Curseur */
+        }
+
+        /* Styles spécifiques au survol */
+
+
+        /* Styles spécifiques au focus */
+        .custom-select:focus {
+            outline: none; /* Supprimez la bordure lorsqu'il est en focus */
+        }
+         h1 {
+        font-size: 4vw;
+        text-align: center;
+        margin: 0 auto; /* Pour centrer horizontalement */
+    }
+    input {
+              width: 50%;
+              height: 4vh;
+            font-size: 2vw;
+    
+}
+    </style>
+    <script src="js/C1_validation.js"></script>
+</head>
+<body>
+    <br>
+    <h1>Modifier un tournois</h1>
+    <form action="/C4_ajouter_tournois" method="post" class="centered-button" style="width: 65%; height: auto; border: 3px solid black; padding: 0.5vw;">
+                                                        <input type="hidden" name="id_tournoi" value="<%= id %>">
+        <input type="hidden" id="email_connecte" name="email_connecte" value="<%= email_connecte %>">
+
+        <label for="nom_tournois">Nom du tournoi : &nbsp;&nbsp;&nbsp;</label>
+        <input type="text" id="nom_tournois" name="nom_tournois" style="width: 50%; height: 4vh; font-size: 2vw;" value="<%= nom_tournois_default %>" required><br><br>
+
+        <label for="date_tournois">Date du tournoi: &nbsp;&nbsp;&nbsp;</label>
+        <input type="date" id="date_tournois" name="date_tournois" style="width: 50%; height: 4vh; font-size: 2vw;" value="<%= date_tournois_default %>" required><br><br>
+
+        <label for="lieu_tournois">Lieu du tournoi: &nbsp;&nbsp;&nbsp;</label>
+        <input type="text" id="lieu_tournois" name="lieu_tournois" style="width: 50%; height: 4vh; font-size: 2vw;" value="<%= lieu_tournois_default %>" required><br><br>
+
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <label for="h_tournois">Heure du tournois: &nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <select id="h_tournois" name="h_tournois" class="form-control custom-select" style="width: 10%; height: 4vh; padding: 0;" required>
+                <% for (let i = 0; i < 24; i++) { %>
+                    <option value="<%= i %>" <%= h_tournois_default == i ? 'selected' : '' %>><%= ('0' + i).slice(-2) %></option>
+                <% } %>
+            </select>
+            <label for="h_tournois"> &nbsp; h &nbsp; </label>
+
+            <select id="m_tournois" name="m_tournois" class="form-control custom-select" style="width: 10%; height: 4vh; padding: 0;" required>
+                <% for (let i = 0; i < 60; i++) { %>
+                    <option value="<%= i %>" <%= m_tournois_default == i ? 'selected' : '' %>><%= ('0' + i).slice(-2) %></option>
+                <% } %>
+            </select>
+            <label for="m_tournois"> &nbsp; min &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+        </div><br>
+
+        <label for="numero_telephone">Numéro de tel: &nbsp;&nbsp;&nbsp;</label>
+        <input type="text" id="numero_telephone" name="numero_telephone" style="width: 50%; height: 4vh; font-size: 2vw;" value="<%= numero_telephone_default %>" required><br>
+
+        <h7 class="toggle-button" onclick="toggleOptionalFields()" style="display: inline-block; cursor: pointer;">&#9660;</h7>
+        <span class="toggle-button" onclick="toggleOptionalFields()" style="display: inline-block; cursor: pointer;">Afficher les champs optionnels</span><br>
+
+        <div class="optional-fields" style="display: none;">
+            <label for="prive">Privé (optionnel):</label><br>
+            <input type="checkbox" id="prive" name="prive" value="true" <%= prive_default == 'true' ? 'checked' : '' %>><br>
+
+            <label for="equipe">Équipe (optionnel):</label><br>
+            <input type="checkbox" id="equipe" name="equipe" value="true" <%= equipe_default == 'true' ? 'checked' : '' %>><br>
+
+            <label for="demander_numero">Numero participant obligatoire (optionnel):</label><br>
+            <input type="checkbox" id="demander_numero" name="demander_numero" value="true" <%= demander_numero_default == 'true' ? 'checked' : '' %>><br>
+
+            <label for="nbr_equipe">Nombre d'équipes (optionnel):</label><br>
+            <input type="number" id="nbr_equipe" name="nbr_equipe" value="<%= nbr_equipe_default %>"><br>
+
+            <label for="place_maximum">Nombre maximum de participants (optionnel):</label><br>
+            <input type="number" id="place_maximum" name="place_maximum" value="<%= place_maximum_default %>"><br>
+
+            <label for="plus_info">Informations supplémentaires (optionnel):</label><br>
+            <input type="text" id="plus_info" name="plus_info" value="<%= plus_info_default %>"><br>
+
+            <label for="nom_activite">Nom de l'activité (optionnel):</label><br>
+            <input type="text" id="nom_activite" name="nom_activite" value="<%= nom_activite_default %>"><br>
+
+            <label for="cash_prize">Prix en argent (optionnel):</label><br>
+            <input type="number" id="cash_prize" name="cash_prize" value="<%= cash_prize_default %>"><br>
+
+            <label for="cout_tournois">Coût du tournoi (optionnel):</label><br>
+            <input type="number" id="cout_tournois" name="cout_tournois" value="<%= cout_tournois_default %>"><br>
+        </div>
+        <br>
+
+        <input type="submit" value="Modifier" style="width: 100%; height: 10vh; font-size: 3.5vw; display: block; margin: 0 auto; text-align: center;">
+    </form>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <a href="/C4" style="position: absolute; top: 20px; left: 20px;">
+            <img src="image/retour.png" alt="Retour" style="width: 50px; height: 50px;">
+        </a>
+        <br><br>
+
+    <div style="
+    <script>
+        function toggleOptionalFields() {
+            const optionalFields = document.querySelector('.optional-fields');
+            const displayStyle = optionalFields.style.display;
+            optionalFields.style.display = displayStyle === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

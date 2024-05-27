@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+                       background-color: #fdfdfd;
+        }
+        .profile-header {
+            position: relative;
+            text-align: center; /* Centrer le contenu */
+            color: white;
+        }
+        .banner-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .profile-picture-container {
+            position: absolute;
+            top: 200px;
+            right: 20px;
+            border-radius: 50%;
+            border: 5px solid white;
+            overflow: hidden;
+            width: 150px;
+            height: 150px;
+        }
+        .profile-picture {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .username {
+            margin-top: 10px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #333;
+            padding-left: 20px;
+        }
+        .profile-content {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .about, .posts, .details {
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #f0f2f5;
+            padding-bottom: 5px;
+        }
+        p {
+            color: #666;
+        }
+        .details ul {
+            list-style: none;
+            padding: 0;
+        }
+        .details li {
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-header">
+        <img src="IMAGE/banniere.png" alt="Bannière" class="banner-image">
+        <div class="profile-picture-container">
+            <img src="IMAGE/profil.png" alt="Profil" class="profile-picture">
+        </div>
+        <h1 class="username">Nom D'utilisateur (prochaine MAJ)  </h1>
+    </div>
+    <div class="profile-content">
+        <div class="details">
+            <h2>Détails du profil</h2>
+            <ul>
+                <li><strong>Email:</strong> <%= email_connecte %> </li>
+                <li><strong>Nom:</strong> John Doe</li>
+                <li><strong>Prénom:</strong> Jane</li>
+                <li><strong>Adresse:</strong> 123 Rue des Fleurs, Ville</li>
+                <li><strong>Numéro:</strong> 1234567890</li>
+                <li><strong>Tournois participés/créés:</strong> 10/5</li>
+                <li><strong>Badges:</strong> Champion, Participant Actif</li>
+                <li><strong>Activité favorite:</strong> Jeux de société</li>
+            </ul>
+        </div>
+        <div class="about">
+            <h2>À propos de moi</h2>
+            <p>Voici une courte description à propos de moi...</p>
+        </div>
+        <div class="posts">
+            <h2>Publications</h2>
+            <p>Aucune publication pour le moment.</p>
+        </div>
+    </div>
+</body>
+</html>
